@@ -1,0 +1,92 @@
+<t-navbar title="发布插画" left-arrow />
+
+<view class="publish-container">
+  <view class="form-section">
+    <view class="section-title">上传图片</view>
+    <t-upload
+      media-type="{{['image']}}"
+      files="{{images}}"
+      gridConfig="{{{column: 3, width: 200, height: 200}}}"
+      bind:success="onImageUpload"
+      bind:remove="onImageRemove"
+      max="9"
+    />
+  </view>
+
+  <view class="form-section">
+    <view class="section-title">作品标题</view>
+    <t-input
+      placeholder="请输入作品标题"
+      value="{{title}}"
+      bind:change="onTitleInput"
+      maxlength="50"
+      clearable
+    />
+  </view>
+
+  <view class="form-section">
+    <view class="section-title">作品描述</view>
+    <t-textarea
+      placeholder="分享你的创作灵感和故事"
+      value="{{description}}"
+      bind:change="onDescriptionInput"
+      maxlength="500"
+      indicator
+      disableDefaultPadding="{{true}}"
+    />
+  </view>
+
+  <view class="form-section">
+    <view class="section-title">选择分类</view>
+    <t-radio-group value="{{category}}" bind:change="onCategoryChange">
+      <t-radio
+        wx:for="{{categories}}"
+        wx:key="index"
+        value="{{item}}"
+        label="{{item}}"
+        variant="outline"
+      />
+    </t-radio-group>
+  </view>
+
+  <view class="form-section">
+    <view class="section-title">添加标签</view>
+    <view class="tags-container">
+      <t-check-tag
+        wx:for="{{availableTags}}"
+        wx:key="index"
+        size="medium"
+        variant="dark"
+        content="#{{item}}"
+        data-tag="{{item}}"
+        checked="{{selectedTags.indexOf(item) > -1}}"
+        bindtap="onTagToggle"
+      />
+    </view>
+  </view>
+
+  <view class="button-group">
+    <t-button
+      class="action-btn"
+      theme="light"
+      size="large"
+      icon="file-copy"
+      bindtap="handleSaveDraft"
+      loading="{{loading}}"
+      disabled="{{loading}}"
+    >
+      存草稿
+    </t-button>
+    <t-button
+      class="action-btn"
+      theme="primary"
+      size="large"
+      icon="upload"
+      bindtap="handlePublish"
+      loading="{{loading}}"
+      disabled="{{loading}}"
+    >
+      发布
+    </t-button>
+  </view>
+</view>

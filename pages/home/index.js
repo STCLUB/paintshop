@@ -1,41 +1,20 @@
 import Message from 'tdesign-miniprogram/message/index';
 import request from '~/api/request';
 
-// 获取应用实例
-// const app = getApp()
-
 Page({
   data: {
     enable: false,
-    swiperList: [],
-    cardInfo: [],
-    // 发布
-    motto: 'Hello World',
-    userInfo: {},
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    canIUseGetUserProfile: false,
-    canIUseOpenData: wx.canIUse('open-data.type.userAvatarUrl') && wx.canIUse('open-data.type.userNickName'), // 如需尝试获取用户信息可改为false
+    artworkList: [],
+    loading: true,
+    isAdmin: false,
   },
-  // 生命周期
-  async onReady() {
-    const [cardRes, swiperRes] = await Promise.all([
-      request('/home/cards').then((res) => res.data),
-      request('/home/swipers').then((res) => res.data),
-    ]);
 
-    this.setData({
-      cardInfo: cardRes.data,
-      focusCardInfo: cardRes.data.slice(0, 3),
-      swiperList: swiperRes.data,
-    });
+  async onReady() {
+    await this.loadArtworkList();
+    this.checkAdminStatus();
   },
+
   onLoad(option) {
-    if (wx.getUserProfile) {
-      this.setData({
-        canIUseGetUserProfile: true,
-      });
-    }
     if (option.oper) {
       let content = '';
       if (option.oper === 'release') {
@@ -46,37 +25,69 @@ Page({
       this.showOperMsg(content);
     }
   },
+
+  checkAdminStatus() {
+    const adminToken = wx.getStorageSync('admin_token');
+    this.setData({ isAdmin: !!adminToken });
+  },
+
   onRefresh() {
     this.refresh();
   },
-  async refresh() {
-    this.setData({
-      enable: true,
-    });
-    const [cardRes, swiperRes] = await Promise.all([
-      request('/home/cards').then((res) => res.data),
-      request('/home/swipers').then((res) => res.data),
-    ]);
 
+  async refresh() {
+    this.setData({ enable: true });
+    await this.loadArtworkList();
     setTimeout(() => {
-      this.setData({
-        enable: false,
-        cardInfo: cardRes.data,
-        swiperList: swiperRes.data,
-      });
+      this.setData({ enable: false });
     }, 1500);
   },
+
+  async loadArtworkList() {
+    try {
+      const res = await request('/artwork/list', 'GET');
+      if (res.code === 200) {
+        this.setData({
+          artworkList: res.data,
+          loading: false,
+        });
+      }
+    } catch (error) {
+      wx.showToast({
+        title: '加载失败',
+        icon: 'none',
+      });
+      this.setData({ loading: false });
+    }
+  },
+
+  onArtworkClick(e) {
+    const { id } = e.currentTarget.dataset;
+    wx.navigateTo({
+      url: `/pages/artwork/detail/index?id=${id}`,
+    });
+  },
+
+  goPublish() {
+    const adminToken = wx.getStorageSync('admin_token');
+    if (!adminToken) {
+      wx.showToast({
+        title: '请先登录管理员账号',
+        icon: 'none',
+      });
+      return;
+    }
+    wx.navigateTo({
+      url: '/pages/admin/publish/index',
+    });
+  },
+
   showOperMsg(content) {
     Message.success({
       context: this,
       offset: [120, 32],
       duration: 4000,
       content,
-    });
-  },
-  goRelease() {
-    wx.navigateTo({
-      url: '/pages/release/index',
     });
   },
 });
