@@ -106,12 +106,6 @@ Page({
     });
   },
 
-  onAdminLogin() {
-    wx.navigateTo({
-      url: '/pages/admin/login/index',
-    });
-  },
-
   onNavigateTo() {
     if (this.data.isAdmin) {
       wx.showToast({

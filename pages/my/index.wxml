@@ -51,11 +51,6 @@
         bindclick="onEleClick"
       />
     </t-grid>
-
-    <view class="login-buttons" wx:if="{{!isLoad}}">
-      <t-button theme="primary" size="large" bindtap="onLogin">用户登录</t-button>
-      <t-button theme="light" size="large" bindtap="onAdminLogin">管理员登录</t-button>
-    </view>
   </view>
 
   <t-cell-group theme="card" wx:if="{{settingList.length > 0}}">

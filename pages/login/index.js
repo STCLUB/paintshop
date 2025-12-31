@@ -40,6 +40,10 @@ Page({
     this.setData({ showPassword: !this.data.showPassword });
   },
 
+  goBack() {
+    wx.navigateBack();
+  },
+
   async handleWechatLogin() {
     this.setData({ loading: true });
 
