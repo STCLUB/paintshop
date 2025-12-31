@@ -10,7 +10,7 @@
 >
   <t-cell
     wx:for="{{ messageList }}"
-    wx:key="index"
+    wx:key="userId"
     t-class-image="avatar"
     t-class-description="content {{ utils.isRead(item.messages) ? '' : 'unread' }}"
     image="{{ item.avatar }}"
@@ -19,6 +19,8 @@
     hover
     bind:tap="toChat"
     data-user-id="{{ item.userId }}"
+    data-name="{{ item.name }}"
+    data-avatar="{{ item.avatar }}"
   >
     <t-badge slot="right-icon" count="{{ utils.computeUnreadNum(item.messages) }}" class="wrapper" />
   </t-cell>

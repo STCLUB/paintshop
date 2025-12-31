@@ -3,11 +3,17 @@ const app = getApp();
 Component({
   data: {
     value: '',
+    unreadNum: 0,
     list: [
       {
         icon: 'home',
         value: 'home',
         label: '首页',
+      },
+      {
+        icon: 'chat',
+        value: 'message',
+        label: '消息',
       },
       {
         icon: 'user',

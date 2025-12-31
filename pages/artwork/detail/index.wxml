@@ -32,7 +32,28 @@
         <text class="author-name">{{artwork.author.name}}</text>
         <text class="publish-time">{{artwork.createTime}}</text>
       </view>
+      <t-button 
+        size="small" 
+        variant="outline" 
+        icon="chat" 
+        bindtap="goToChat"
+      >
+        私信
+      </t-button>
     </view>
+
+    <view class="action-bar">
+      <view class="action-item" bindtap="toggleLike">
+        <t-icon name="{{isLiked ? 'heart-filled' : 'heart'}}" size="48rpx" color="{{isLiked ? '#e34d59' : '#999'}}" />
+        <text class="action-text">{{likeCount}}</text>
+      </view>
+      <button class="share-btn" open-type="share">
+        <t-icon name="share" size="48rpx" color="#999" />
+        <text class="action-text">分享</text>
+      </button>
+    </view>
+
+    <view class="divider"></view>
 
     <view class="description">
       <text class="label">作品描述</text>
@@ -45,7 +66,7 @@
         wx:key="index" 
         size="medium" 
         variant="light" 
-        theme="primary"
+        theme="{{index === 0 ? 'primary' : 'success'}}"
       >
         #{{item}}
       </t-tag>
@@ -55,9 +76,50 @@
       <text class="category-label">分类：</text>
       <text class="category-value">{{artwork.category}}</text>
     </view>
+
+    <view class="divider"></view>
+
+    <view class="comment-section">
+      <view class="comment-header">
+        <text class="comment-title">评论 ({{commentList.length}})</text>
+      </view>
+
+      <view class="comment-input-box">
+        <t-textarea
+          class="comment-input"
+          placeholder="说点什么吧..."
+          value="{{commentInput}}"
+          bind:change="onCommentInput"
+          maxlength="200"
+          disableDefaultPadding="{{true}}"
+          indicator
+        />
+        <t-button 
+          class="comment-submit-btn" 
+          theme="primary" 
+          size="small" 
+          bindtap="submitComment"
+        >
+          发送
+        </t-button>
+      </view>
+
+      <view class="comment-list" wx:if="{{commentList.length > 0}}">
+        <view class="comment-item" wx:for="{{commentList}}" wx:key="id">
+          <image class="comment-avatar" src="{{item.user.avatar}}" />
+          <view class="comment-content-box">
+            <view class="comment-user">
+              <text class="comment-nickname">{{item.user.nickName}}</text>
+              <text class="comment-time">{{item.createTime}}</text>
+            </view>
+            <text class="comment-text">{{item.content}}</text>
+          </view>
+        </view>
+      </view>
+
+      <t-empty wx:if="{{commentList.length === 0}}" description="暂无评论，快来抢沙发吧~" />
+    </view>
   </view>
 </view>
 
 <t-loading theme="circular" size="40rpx" text="加载中..." loading="{{loading}}" />
-
-<t-message id="t-message" />

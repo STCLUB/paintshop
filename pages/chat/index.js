@@ -1,55 +1,54 @@
-// pages/chat/index.js
-const app = getApp();
-const { socket } = app.globalData; // 获取已连接的socketTask
+import request from '~/api/request';
 
 Page({
-  /** 页面的初始数据 */
   data: {
-    myAvatar: '/static/chat/avatar.png', // 自己的头像
-    userId: null, // 对方userId
-    avatar: '', // 对方头像
-    name: '', // 对方昵称
-    messages: [], // 消息列表 { messageId, from, content, time, read }
-    input: '', // 输入框内容
-    anchor: '', // 消息列表滚动到 id 与之相同的元素的位置
-    keyboardHeight: 0, // 键盘当前高度(px)
+    myAvatar: '',
+    userId: null,
+    avatar: '',
+    name: '',
+    messages: [],
+    input: '',
+    anchor: '',
+    keyboardHeight: 0,
+    artworkId: '',
+    isAdmin: false,
   },
 
-  /** 生命周期函数--监听页面加载 */
   onLoad(options) {
-    this.getOpenerEventChannel().on('update', this.update);
+    const { userId, artworkId } = options;
+    
+    const userInfo = wx.getStorageSync('userInfo');
+    const adminToken = wx.getStorageSync('admin_token');
+    
+    this.setData({
+      myAvatar: userInfo ? userInfo.avatarUrl : '/static/user-avatar.png',
+      isAdmin: !!adminToken,
+      artworkId: artworkId || '',
+    });
+
+    if (userId) {
+      this.loadChatHistory(userId);
+      this.setData({ userId });
+    }
   },
 
-  /** 生命周期函数--监听页面初次渲染完成 */
-  onReady() {},
-
-  /** 生命周期函数--监听页面显示 */
-  onShow() {},
-
-  /** 生命周期函数--监听页面隐藏 */
-  onHide() {},
-
-  /** 生命周期函数--监听页面卸载 */
-  onUnload() {
-    app.eventBus.off('update', this.update);
+  async loadChatHistory(userId) {
+    try {
+      const res = await request(`/chat/history/${userId}`, 'GET');
+      if (res.code === 200) {
+        const { avatar, name, messages } = res.data;
+        this.setData({ 
+          avatar, 
+          name, 
+          messages: [...messages] 
+        });
+        wx.nextTick(this.scrollToBottom);
+      }
+    } catch (error) {
+      console.error('加载聊天记录失败', error);
+    }
   },
 
-  /** 页面相关事件处理函数--监听用户下拉动作 */
-  onPullDownRefresh() {},
-
-  /** 页面上拉触底事件的处理函数 */
-  onReachBottom() {},
-
-  /** 用户点击右上角分享 */
-  onShareAppMessage() {},
-
-  /** 更新数据 */
-  update({ userId, avatar, name, messages }) {
-    this.setData({ userId, avatar, name, messages: [...messages] });
-    wx.nextTick(this.scrollToBottom);
-  },
-
-  /** 处理唤起键盘事件 */
   handleKeyboardHeightChange(event) {
     const { height } = event.detail;
     if (!height) return;
@@ -57,28 +56,51 @@ Page({
     wx.nextTick(this.scrollToBottom);
   },
 
-  /** 处理收起键盘事件 */
   handleBlur() {
     this.setData({ keyboardHeight: 0 });
   },
 
-  /** 处理输入事件 */
   handleInput(event) {
     this.setData({ input: event.detail.value });
   },
 
-  /** 发送消息 */
-  sendMessage() {
+  async sendMessage() {
     const { userId, messages, input: content } = this.data;
-    if (!content) return;
-    const message = { messageId: null, from: 0, content, time: Date.now(), read: true };
-    messages.push(message);
+    if (!content.trim()) return;
+
+    const newMessage = { 
+      messageId: Date.now(),
+      from: this.data.isAdmin ? 1 : 0,
+      content, 
+      time: Date.now(), 
+      read: true 
+    };
+    
+    messages.push(newMessage);
     this.setData({ input: '', messages });
-    socket.send(JSON.stringify({ type: 'message', data: { userId, content } }));
     wx.nextTick(this.scrollToBottom);
+
+    try {
+      const res = await request('/chat/send', 'POST', {
+        toUserId: userId,
+        content,
+        artworkId: this.data.artworkId,
+      });
+
+      if (res.code !== 200) {
+        wx.showToast({
+          title: '发送失败',
+          icon: 'none',
+        });
+      }
+    } catch (error) {
+      wx.showToast({
+        title: '发送失败',
+        icon: 'none',
+      });
+    }
   },
 
-  /** 消息列表滚动到底部 */
   scrollToBottom() {
     this.setData({ anchor: 'bottom' });
   },

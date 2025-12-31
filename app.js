@@ -1,5 +1,6 @@
 import config from './config';
 import Mock from './mock/index';
+import createBus from './utils/eventBus';
 
 if (config.isMock) {
   Mock();
@@ -27,5 +28,13 @@ App({
   globalData: {
     userInfo: null,
     adminInfo: null,
+    unreadNum: 0,
+  },
+
+  eventBus: createBus(),
+
+  setUnreadNum(num) {
+    this.globalData.unreadNum = num;
+    this.eventBus.emit('unread-num-change', num);
   },
 });

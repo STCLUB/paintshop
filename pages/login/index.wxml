@@ -6,24 +6,63 @@
   </view>
 
   <view class="login-content">
-    <view class="user-info" wx:if="{{userInfo}}">
-      <image class="avatar" src="{{userInfo.avatarUrl}}" />
-      <text class="nickname">{{userInfo.nickName}}</text>
-    </view>
+    <t-tabs value="{{loginType}}" bind:change="onLoginTypeChange">
+      <t-tab-panel label="用户登录" value="user">
+        <view class="user-info" wx:if="{{userInfo}}">
+          <image class="avatar" src="{{userInfo.avatarUrl}}" />
+          <text class="nickname">{{userInfo.nickName}}</text>
+        </view>
 
-    <button 
-      class="login-btn wechat-btn" 
-      bindtap="handleWechatLogin" 
-      loading="{{loading}}"
-      disabled="{{loading}}"
-    >
-      <image class="btn-icon" src="/static/wechat-icon.png" />
-      <text>微信一键登录</text>
-    </button>
+        <button 
+          class="login-btn wechat-btn" 
+          bindtap="handleWechatLogin" 
+          loading="{{loading}}"
+          disabled="{{loading}}"
+          wx:if="{{!userInfo}}"
+        >
+          <image class="btn-icon" src="/static/wechat-icon.png" />
+          <text>微信一键登录</text>
+        </button>
+      </t-tab-panel>
+      
+      <t-tab-panel label="管理员登录" value="admin">
+        <view class="form-section">
+          <view class="form-item">
+            <view class="form-label">管理员账号</view>
+            <t-input 
+              placeholder="请输入管理员账号" 
+              value="{{username}}" 
+              bind:change="onUsernameInput"
+              clearable
+            />
+          </view>
 
-    <view class="admin-login">
-      <text class="admin-link" bindtap="goToAdminLogin">管理员登录</text>
-    </view>
+          <view class="form-item">
+            <view class="form-label">密码</view>
+            <t-input 
+              placeholder="请输入密码" 
+              value="{{password}}" 
+              bind:change="onPasswordInput"
+              type="{{showPassword ? 'text' : 'password'}}"
+              clearable
+            >
+              <t-icon slot="suffix" name="{{showPassword ? 'browse' : 'browse-off'}}" bindtap="togglePassword" />
+            </t-input>
+          </view>
+
+          <t-button 
+            class="login-btn" 
+            theme="primary" 
+            size="large" 
+            bindtap="handleAdminLogin"
+            loading="{{loading}}"
+            disabled="{{loading}}"
+          >
+            登录
+          </t-button>
+        </view>
+      </t-tab-panel>
+    </t-tabs>
   </view>
 
   <view class="login-footer">

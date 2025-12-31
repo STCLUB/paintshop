@@ -1,5 +1,5 @@
 {
-  "pages": ["pages/home/index", "pages/my/index"],
+  "pages": ["pages/home/index", "pages/message/index", "pages/my/index"],
   "usingComponents": {
     "t-toast": "tdesign-miniprogram/toast/toast"
   },
@@ -10,11 +10,6 @@
       "pages": ["index"]
     },
     {
-      "root": "pages/admin/login",
-      "name": "adminLogin",
-      "pages": ["index"]
-    },
-    {
       "root": "pages/artwork/detail",
       "name": "artworkDetail",
       "pages": ["index"]
@@ -22,6 +17,11 @@
     {
       "root": "pages/admin/publish",
       "name": "adminPublish",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/chat",
+      "name": "chat",
       "pages": ["index"]
     },
     {
@@ -57,6 +57,10 @@
       {
         "pagePath": "pages/home/index",
         "text": "首页"
+      },
+      {
+        "pagePath": "pages/message/index",
+        "text": "消息"
       },
       {
         "pagePath": "pages/my/index",

@@ -1,3 +1,5 @@
+<nav nav-type="search" />
+
 <view class="home-container">
   <view class="home-content">
     <t-pull-down-refresh
@@ -5,23 +7,31 @@
       bind:refresh="onRefresh"
       loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}"
     >
-      <view class="artwork-grid">
+      <view class="home-card-list">
         <view 
-          class="artwork-item" 
+          class="home-card" 
           wx:for="{{artworkList}}" 
           wx:key="id"
           data-id="{{item.id}}"
           bindtap="onArtworkClick"
         >
-          <image class="artwork-image" src="{{item.images[0]}}" mode="aspectFill" />
-          <view class="artwork-info">
-            <text class="artwork-title">{{item.title}}</text>
-            <view class="artwork-meta">
+          <image class="home-card__image" src="{{item.images[0]}}" mode="aspectFill" />
+          <view class="home-card__info">
+            <text class="home-card__title">{{item.title}}</text>
+            <view class="home-card__meta">
               <image class="author-avatar" src="{{item.author.avatar}}" />
               <text class="author-name">{{item.author.name}}</text>
             </view>
-            <view class="artwork-tags" wx:if="{{item.tags && item.tags.length > 0}}">
-              <text class="tag" wx:for="{{item.tags}}" wx:key="index">#{{item}}</text>
+            <view class="home-card__tag-group" wx:if="{{item.tags && item.tags.length > 0}}">
+              <t-tag 
+                wx:for="{{item.tags}}" 
+                wx:key="index" 
+                size="small" 
+                variant="light" 
+                theme="{{index === 0 ? 'primary' : 'success'}}"
+              >
+                {{item}}
+              </t-tag>
             </view>
           </view>
         </view>

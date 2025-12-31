@@ -7,7 +7,6 @@ Page({
     artworkList: [],
     loading: true,
     isAdmin: false,
-    currentTab: 'recommend',
   },
 
   async onReady() {
@@ -60,10 +59,6 @@ Page({
       });
       this.setData({ loading: false });
     }
-  },
-
-  onTabChange(e) {
-    this.setData({ currentTab: e.detail.value });
   },
 
   onArtworkClick(e) {

@@ -9,52 +9,64 @@
   }
 }
 
-.artwork-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24rpx;
+.home-card-list {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24rpx 12rpx;
   padding: 24rpx;
   background-color: @bg-color;
 }
 
-.artwork-item {
-  background: #fff;
-  border-radius: 16rpx;
-  overflow: hidden;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
-}
+.home-card {
+  display: inline-flex;
+  flex-direction: column;
+  width: 340rpx;
+  height: 488rpx;
+  border-radius: 9px;
+  background: @bg-color-white;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
 
-.artwork-image {
-  width: 100%;
-  height: 340rpx;
-  display: block;
-}
+  &__image {
+    width: 340rpx;
+    height: 340rpx;
+    display: block;
+  }
 
-.artwork-info {
-  padding: 24rpx;
-}
+  &__info {
+    padding: 32rpx;
+    font-weight: 400;
+    font-size: @font-size-small;
+  }
 
-.artwork-title {
-  display: block;
-  font-size: 28rpx;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 16rpx;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+  &__title {
+    display: block;
+    font-size: 28rpx;
+    font-weight: 500;
+    color: #000000e6;
+    margin-bottom: 16rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-.artwork-meta {
-  display: flex;
-  align-items: center;
-  margin-bottom: 16rpx;
+  &__meta {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16rpx;
+  }
+
+  &__tag-group {
+    display: flex;
+    gap: 16rpx;
+    margin-top: 16rpx;
+  }
 }
 
 .author-avatar {
-  width: 40rpx;
-  height: 40rpx;
-  border-radius: 20rpx;
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 16rpx;
   margin-right: 12rpx;
 }
 
@@ -65,20 +77,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.artwork-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8rpx;
-}
-
-.tag {
-  font-size: 20rpx;
-  color: #0052d9;
-  background: rgba(0, 82, 217, 0.1);
-  padding: 4rpx 12rpx;
-  border-radius: 4rpx;
 }
 
 .home-publish {

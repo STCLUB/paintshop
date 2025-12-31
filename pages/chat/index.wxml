@@ -1,11 +1,11 @@
 <wxs src="./index.wxs" module="utils" />
 
-<t-navbar class="nav-bar" title="{{ name }}" left-arrow />
+<t-navbar class="nav-bar" title="{{ name || '聊天' }}" left-arrow />
 
 <view class="chat-container">
   <scroll-view class="content" scroll-y scroll-into-view="{{ anchor }}">
     <view class="messages">
-      <block wx:for="{{ messages }}" wx:key="index">
+      <block wx:for="{{ messages }}" wx:key="messageId">
         <view wx:if="{{ index === 0 || item.time - messages[index - 1].time > 120000 }}" class="time" >
           {{ utils.formatTime(item.time) }}
         </view>
@@ -43,7 +43,7 @@
       value="{{ input }}"
       type="text"
       confirm-type="send"
-      placeholder="请输入"
+      placeholder="请输入消息"
       placeholder-style="color: #00000066"
       adjust-position="{{ false }}"
       hold-keyboard

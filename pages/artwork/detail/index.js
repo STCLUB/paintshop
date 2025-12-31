@@ -6,6 +6,11 @@ Page({
     artwork: null,
     loading: true,
     currentImageIndex: 0,
+    commentList: [],
+    commentInput: '',
+    isLiked: false,
+    likeCount: 0,
+    isAdmin: false,
   },
 
   onLoad(options) {
@@ -13,7 +18,14 @@ Page({
     if (id) {
       this.setData({ artworkId: id });
       this.loadArtworkDetail(id);
+      this.loadComments(id);
     }
+    this.checkAdminStatus();
+  },
+
+  checkAdminStatus() {
+    const adminToken = wx.getStorageSync('admin_token');
+    this.setData({ isAdmin: !!adminToken });
   },
 
   async loadArtworkDetail(id) {
@@ -22,6 +34,7 @@ Page({
       if (res.code === 200) {
         this.setData({
           artwork: res.data,
+          likeCount: res.data.likeCount || 0,
           loading: false,
         });
       }
@@ -31,6 +44,17 @@ Page({
         icon: 'none',
       });
       this.setData({ loading: false });
+    }
+  },
+
+  async loadComments(id) {
+    try {
+      const res = await request(`/artwork/${id}/comments`, 'GET');
+      if (res.code === 200) {
+        this.setData({ commentList: res.data || [] });
+      }
+    } catch (error) {
+      console.error('加载评论失败', error);
     }
   },
 
@@ -48,6 +72,82 @@ Page({
     });
   },
 
+  onCommentInput(e) {
+    this.setData({ commentInput: e.detail.value });
+  },
+
+  async submitComment() {
+    const { commentInput, artworkId } = this.data;
+    
+    if (!commentInput.trim()) {
+      wx.showToast({
+        title: '请输入评论内容',
+        icon: 'none',
+      });
+      return;
+    }
+
+    const userToken = wx.getStorageSync('access_token');
+    if (!userToken) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+      });
+      return;
+    }
+
+    try {
+      const res = await request(`/artwork/${artworkId}/comments`, 'POST', {
+        content: commentInput,
+      });
+
+      if (res.code === 200) {
+        wx.showToast({
+          title: '评论成功',
+          icon: 'success',
+        });
+        this.setData({ commentInput: '' });
+        this.loadComments(artworkId);
+      }
+    } catch (error) {
+      wx.showToast({
+        title: '评论失败',
+        icon: 'none',
+      });
+    }
+  },
+
+  async toggleLike() {
+    const userToken = wx.getStorageSync('access_token');
+    if (!userToken) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+      });
+      return;
+    }
+
+    const { artworkId, isLiked, likeCount } = this.data;
+
+    try {
+      const res = await request(`/artwork/${artworkId}/like`, 'POST', {
+        action: isLiked ? 'unlike' : 'like',
+      });
+
+      if (res.code === 200) {
+        this.setData({
+          isLiked: !isLiked,
+          likeCount: isLiked ? likeCount - 1 : likeCount + 1,
+        });
+      }
+    } catch (error) {
+      wx.showToast({
+        title: '操作失败',
+        icon: 'none',
+      });
+    }
+  },
+
   onShareAppMessage() {
     const { artwork } = this.data;
     return {
@@ -63,5 +163,19 @@ Page({
       title: artwork ? artwork.title : '插画工坊',
       imageUrl: artwork ? artwork.images[0] : '',
     };
+  },
+
+  goToChat() {
+    const userToken = wx.getStorageSync('access_token');
+    if (!userToken) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+      });
+      return;
+    }
+    wx.navigateTo({
+      url: `/pages/chat/index?artworkId=${this.data.artworkId}`,
+    });
   },
 });
