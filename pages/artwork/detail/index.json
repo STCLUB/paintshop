@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "插画详情",
+  "usingComponents": {
+    "t-navbar": "tdesign-miniprogram/navbar/navbar",
+    "t-tag": "tdesign-miniprogram/tag/tag",
+    "t-loading": "tdesign-miniprogram/loading/loading",
+    "t-message": "tdesign-miniprogram/message/message"
+  }
+}

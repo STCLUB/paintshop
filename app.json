@@ -1,9 +1,29 @@
 {
-  "pages": ["pages/home/index", "pages/message/index", "pages/my/index"],
+  "pages": ["pages/home/index", "pages/my/index"],
   "usingComponents": {
     "t-toast": "tdesign-miniprogram/toast/toast"
   },
   "subpackages": [
+    {
+      "root": "pages/login",
+      "name": "login",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/admin/login",
+      "name": "adminLogin",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/artwork/detail",
+      "name": "artworkDetail",
+      "pages": ["index"]
+    },
+    {
+      "root": "pages/admin/publish",
+      "name": "adminPublish",
+      "pages": ["index"]
+    },
     {
       "root": "pages/search",
       "name": "search",
@@ -15,21 +35,6 @@
       "pages": ["index"]
     },
     {
-      "root": "pages/chat",
-      "name": "chat",
-      "pages": ["index"]
-    },
-    {
-      "root": "pages/login",
-      "name": "login",
-      "pages": ["login"]
-    },
-    {
-      "root": "pages/loginCode",
-      "name": "loginCode",
-      "pages": ["loginCode"]
-    },
-    {
       "root": "pages/dataCenter",
       "name": "dataCenter",
       "pages": ["index"]
@@ -38,17 +43,12 @@
       "root": "pages/setting",
       "name": "setting",
       "pages": ["index"]
-    },
-    {
-      "root": "pages/release",
-      "name": "release",
-      "pages": ["index"]
     }
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Weixin",
+    "navigationBarTitleText": "插画工坊",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
@@ -57,10 +57,6 @@
       {
         "pagePath": "pages/home/index",
         "text": "首页"
-      },
-      {
-        "pagePath": "pages/message/index",
-        "text": "消息"
       },
       {
         "pagePath": "pages/my/index",

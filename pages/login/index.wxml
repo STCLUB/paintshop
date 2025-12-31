@@ -1,0 +1,32 @@
+<view class="login-container">
+  <view class="login-header">
+    <image class="logo" src="/static/logo.png" mode="aspectFit" />
+    <text class="title">插画工坊</text>
+    <text class="subtitle">发现美好插画，分享创作灵感</text>
+  </view>
+
+  <view class="login-content">
+    <view class="user-info" wx:if="{{userInfo}}">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" />
+      <text class="nickname">{{userInfo.nickName}}</text>
+    </view>
+
+    <button 
+      class="login-btn wechat-btn" 
+      bindtap="handleWechatLogin" 
+      loading="{{loading}}"
+      disabled="{{loading}}"
+    >
+      <image class="btn-icon" src="/static/wechat-icon.png" />
+      <text>微信一键登录</text>
+    </button>
+
+    <view class="admin-login">
+      <text class="admin-link" bindtap="goToAdminLogin">管理员登录</text>
+    </view>
+  </view>
+
+  <view class="login-footer">
+    <text class="agreement">登录即表示同意《用户协议》和《隐私政策》</text>
+  </view>
+</view>

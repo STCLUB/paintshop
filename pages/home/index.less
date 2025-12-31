@@ -1,39 +1,89 @@
 @import '/variable.less';
 
-@home-tab-item-height: 96rpx;
-
 .home-container {
   height: calc(100vh - @tab-bar-height);
 
   .home-content {
-    height: calc(100% - @nav-bar-height);
-  }
-
-  .t-tabs {
-    --td-tab-item-tag-height: @home-tab-item-height;
-    --td-tab-font-size: @font-size-small;
-    width: 100%;
     height: 100%;
-
-    &__content {
-      height: calc(100% - @home-tab-item-height);
-      overflow: auto;
-      background-color: @bg-color;
-    }
-  }
-
-  .home-card-list {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 24rpx 12rpx;
-    padding: 24rpx;
-    background-color: @bg-color;
+    overflow: auto;
   }
 }
 
-.home-release {
+.artwork-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24rpx;
+  padding: 24rpx;
+  background-color: @bg-color;
+}
+
+.artwork-item {
+  background: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.artwork-image {
+  width: 100%;
+  height: 340rpx;
+  display: block;
+}
+
+.artwork-info {
+  padding: 24rpx;
+}
+
+.artwork-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 16rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.artwork-meta {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.author-avatar {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 20rpx;
+  margin-right: 12rpx;
+}
+
+.author-name {
+  font-size: 24rpx;
+  color: #999;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.artwork-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.tag {
+  font-size: 20rpx;
+  color: #0052d9;
+  background: rgba(0, 82, 217, 0.1);
+  padding: 4rpx 12rpx;
+  border-radius: 4rpx;
+}
+
+.home-publish {
   position: fixed;
   bottom: 208rpx;
   right: 32rpx;
+  z-index: 100;
 }
